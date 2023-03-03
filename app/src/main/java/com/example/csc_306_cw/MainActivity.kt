@@ -3,40 +3,97 @@ package com.example.csc_306_cw
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.artefactsmenu)
+
+        var atrefacts = popilateList()
+        var atrefact = atrefacts.get(1)
 
 
-        //find text box
-        val mainText = findViewById<TextView>(R.id.MainText)
+        // setting the name
+        var name = findViewById<View>(R.id.Title) as TextView
+        name.text = atrefact.getName()
 
-        //update the text
-        mainText.text = "heyyyyy"
+        // setting the MainImage
+        var mainImage = findViewById<View>(R.id.main_image) as ImageView
+        mainImage.setImageResource(atrefact.getImage())
+
+        //Setting the text recycler View
+        val textRecyclerView = findViewById<View>(R.id.text_holder) as RecyclerView
+        val layoutManger1 =  LinearLayoutManager(this)
+        textRecyclerView.layoutManager = layoutManger1
+
+        val textSectionArtefactTextAdapter = ArtefactTextAdapter(atrefact.getArtefactParagraphs())
+        textRecyclerView.adapter= textSectionArtefactTextAdapter
+
+        //Setting the modalities recycler View
+        val modalitiesRecyclerView = findViewById<View>(R.id.modalities_holder) as RecyclerView
+        val layoutManger =  LinearLayoutManager(this)
+        modalitiesRecyclerView.layoutManager = layoutManger
+
+        val modalitiesSectionArtefactModalitiesAdapter = ArtefactModalitiesAdapter(atrefact.getArtefactModalities())
+        modalitiesRecyclerView.adapter= modalitiesSectionArtefactModalitiesAdapter
+
     }
 
-    fun updateText(view: View) {
+    private fun popilateList(): ArrayList<Artefact>{
+        var list = ArrayList<Artefact>()
 
-        //find text box
-        val mainText = findViewById<TextView>(R.id.MainText)
+        val mainImages = arrayOf(
+               R.drawable.atrefact1, R.drawable.atrefact2,R.drawable.atrefact3,R.drawable.atrefact4,
+            R.drawable.atrefact5,R.drawable.atrefact6, R.drawable.atrefact7
+        )
 
-        //update the text
-        mainText.text = "heyyyyy2"
+        val names = arrayOf(
+            "Macintosh Plus", "NeXT Computer", "iMac G3", "apple", "StyleWriter", "PET", "VIC20"
+        )
+
+        for (i in 0 .. 6 ){
+            val artefact = Artefact()
+            artefact.setName(names[i])
+            artefact.setImage(mainImages[i])
+            artefact.setArtefactParagraphs(popilateParagraphs())
+            artefact.setArtefactModalities(popilateModalities())
+            list.add(artefact)
+        }
+
+        return list
+
+
+    }
+    private fun popilateParagraphs(): HashMap<String, String>{
+
+        var paragraphs : HashMap<String, String> = HashMap<String, String> ()
+
+        paragraphs.put("Fahd", "Each artifact will have a page and as done in Wikipedia (Figure 1) a section of the artifact page will be dedicated for non-text content laid one by one vertically and the remaining part of the page will be used to display the text [].")
+
+        paragraphs.put("Fahd1", "Each artifact will have a page and as done in Wikipedia (Figure 1) a section of the artifact page will be dedicated for non-text content laid one by one vertically and the remaining part of the page will be used to display the text [].")
+
+        paragraphs.put("Fahd2", "Each artifact will have a page and as done in Wikipedia (Figure 1) a section of the artifact page will be dedicated for non-text content laid one by one vertically and the remaining part of the page will be used to display the text [].")
+
+        paragraphs.put("Fahd3", "Each artifact will have a page and as done in Wikipedia (Figure 1) a section of the artifact page will be dedicated for non-text content laid one by one vertically and the remaining part of the page will be used to display the text [].")
+        paragraphs.put("Fahd4", "Each artifact will have a page and as done in Wikipedia (Figure 1) a section of the artifact page will be dedicated for non-text content laid one by one vertically and the remaining part of the page will be used to display the text [].")
+
+        return paragraphs
+
     }
 
-    fun updateFromKeyboard (view: View) {
+    private fun popilateModalities(): ArrayList<Int>{
 
-        // acquire the keyboard input
-        val kbInput = findViewById<EditText>(R.id.editTextTextPersonName)
-        val kbText = kbInput.text
+        var modalities : ArrayList<Int> = ArrayList<Int>()
 
-        //update text
-        val mainText = findViewById<TextView>(R.id.MainText)
-        mainText.text = kbText
+        modalities.add(R.drawable.next1)
+        modalities.add(R.drawable.next2)
+        modalities.add(R.drawable.next4)
+        modalities.add(R.drawable.next5)
+        return modalities
 
     }
 }
