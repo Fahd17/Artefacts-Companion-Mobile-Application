@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="right"
-            android:layout_weight="3"
+            android:layout_weight="6"
             android:orientation="vertical">
 
             <ImageView
@@ -39,14 +39,10 @@
 
             <fragment
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="150dp"
                 android:id="@+id/map"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 />
-            <com.google.android.gms.maps.MapView
-                android:id="@+id/google_map_API"
-                android:layout_width="match_parent"
-                android:layout_height="75dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/modalities_holder"
@@ -63,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="left"
-            android:layout_weight="2"
+            android:layout_weight="5"
             android:orientation="vertical">
 
             <TextView
