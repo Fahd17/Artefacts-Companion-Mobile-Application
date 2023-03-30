@@ -4,6 +4,7 @@ class Artefact {
 
     private var artefactName: String? = null
     private var artefactMainImage: Int = 0
+    private var metaData: String? = null
 
     private var paragraphs : HashMap<String, String> = HashMap<String, String> ()
 
@@ -23,6 +24,14 @@ class Artefact {
 
     fun setImage(image: Int){
         this.artefactMainImage = image
+    }
+
+    fun getMeta(): String {
+        return metaData.toString()
+    }
+
+    fun setMeta(meta: String){
+        this.metaData = meta
     }
 
     fun getArtefactParagraphs (): HashMap<String, String>{

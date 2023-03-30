@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "118810126198",
+    "project_id": "artefacts-companion-app",
+    "storage_bucket": "artefacts-companion-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:118810126198:android:5ab5d8e38536ba0cf0fc57",
+        "android_client_info": {
+          "package_name": "com.example.csc_306_cw"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "118810126198-jfncq65nqukrsb8v5a7pfk1l3m8fmiv9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoQHAMo77QWDIgm1CcLGP8ypNrA4NVf1E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "118810126198-jfncq65nqukrsb8v5a7pfk1l3m8fmiv9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

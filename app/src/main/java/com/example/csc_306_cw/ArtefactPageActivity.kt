@@ -1,8 +1,6 @@
 package com.example.csc_306_cw
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -17,40 +15,55 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
-class MainActivity : AppCompatActivity(){
+class ArtefactPageActivity: FragmentActivity(), OnMapReadyCallback {
 
-    var atrefacts: ArrayList<Artefact> = ArrayList<Artefact>()
+    lateinit var map: GoogleMap
+    lateinit var atrefacts: ArrayList<Artefact>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.artefact_menu)
+        setContentView(R.layout.artefact_page)
 
-        atrefacts = popilateList()
+    var mapFragment: SupportMapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+    mapFragment.getMapAsync(this)
 
-        val textRecyclerView = findViewById<View>(R.id.artefacts_menu) as RecyclerView
-        val layoutManger =  LinearLayoutManager(this)
-        textRecyclerView.layoutManager = layoutManger
+    atrefacts = popilateList()
+    var atrefact = atrefacts.get(1)
 
-        val artefactMenuAdapter = ArtefactRowAdapter(atrefacts)
-        textRecyclerView.adapter= artefactMenuAdapter
 
-    }
+    // setting the name
+    var name = findViewById<View>(R.id.Title) as TextView
+    name.text = atrefact.getName()
 
-    fun launch(view: View){
+    // setting the MainImage
+    var mainImage = findViewById<View>(R.id.main_image) as ImageView
+    mainImage.setImageResource(atrefact.getImage())
 
-        val newIntent = Intent(this, ArtefactPageActivity::class.java)
-        startActivity(newIntent)
-    }
+    //Setting the text recycler View
+    val textRecyclerView = findViewById<View>(R.id.text_holder) as RecyclerView
+    val layoutManger1 =  LinearLayoutManager(this)
+    textRecyclerView.layoutManager = layoutManger1
 
-    fun launch2(view: View){
-        val newIntent2 = Intent(this, LoginActivity::class.java)
-        startActivity(newIntent2)
-    }
+    val textSectionArtefactTextAdapter = ArtefactTextAdapter(atrefact.getArtefactParagraphs())
+    textRecyclerView.adapter= textSectionArtefactTextAdapter
 
-    public fun getArtefacts():  ArrayList<Artefact>{
+    //Setting the modalities recycler View
+    val modalitiesRecyclerView = findViewById<View>(R.id.modalities_holder) as RecyclerView
+    val layoutManger =  LinearLayoutManager(this)
+    modalitiesRecyclerView.layoutManager = layoutManger
 
-        return atrefacts
-    }
+    val modalitiesSectionArtefactModalitiesAdapter = ArtefactModalitiesAdapter(atrefact.getArtefactModalities())
+    modalitiesRecyclerView.adapter= modalitiesSectionArtefactModalitiesAdapter
 
+}
+
+override fun onMapReady(googleMap: GoogleMap) {
+
+    map = googleMap
+    var campus: LatLng = LatLng(51.619296, -3.878914)
+    map.addMarker(MarkerOptions().position(campus).title("Computational Foundry"))
+    map.moveCamera(CameraUpdateFactory.newLatLng(campus))
+}
     private fun popilateList(): ArrayList<Artefact>{
         var list = ArrayList<Artefact>()
 
@@ -105,5 +118,4 @@ class MainActivity : AppCompatActivity(){
         return modalities
 
     }
-
 }
