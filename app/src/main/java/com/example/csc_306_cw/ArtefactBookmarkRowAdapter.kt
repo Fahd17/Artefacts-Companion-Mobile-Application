@@ -9,16 +9,18 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.csc_306_cw.database.DBManager
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-class ArtefactRowAdapter(private val artefacts: ArrayList<Artefact>): RecyclerView.Adapter<ArtefactRowAdapter.ViewHolder>(){
+class ArtefactBookmarkRowAdapter(private val artefacts: ArrayList<Artefact>): RecyclerView.Adapter<ArtefactBookmarkRowAdapter.ViewHolder>(){
 
     private lateinit var context: Context
     private var auth =  Firebase.auth
     private var currentUser = auth.currentUser
+
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         var artefactImage = itemView.findViewById<View>(R.id.atrefact_image) as ImageView
         var artefactName = itemView.findViewById<View>(R.id.artefacr_name) as TextView
@@ -26,10 +28,10 @@ class ArtefactRowAdapter(private val artefacts: ArrayList<Artefact>): RecyclerVi
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtefactRowAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtefactBookmarkRowAdapter.ViewHolder {
         context = parent.context
         var inflater = LayoutInflater.from(parent.context)
-        val v = inflater.inflate(R.layout.artefact_row, parent, false)
+        val v = inflater.inflate(R.layout.bookmark_artefact_row, parent, false)
 
         return ViewHolder(v)
     }
@@ -38,7 +40,7 @@ class ArtefactRowAdapter(private val artefacts: ArrayList<Artefact>): RecyclerVi
         return artefacts.size
     }
 
-    override fun onBindViewHolder(holder: ArtefactRowAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ArtefactBookmarkRowAdapter.ViewHolder, position: Int) {
         val info = artefacts[position]
 
         holder.artefactImage.setImageResource(info.getImage())
@@ -51,14 +53,14 @@ class ArtefactRowAdapter(private val artefacts: ArrayList<Artefact>): RecyclerVi
             Log.d("testing",info.getId().toString() )
             context.startActivity(newIntent)
         })
-        var addToBookmark = holder.itemView.findViewById<Button>(R.id.add_to_bookmark)as Button
-        addToBookmark.setOnClickListener(View.OnClickListener {
+        var frmoveFromBookmark = holder.itemView.findViewById<Button>(R.id.remove_from_bookmark)as Button
+        frmoveFromBookmark.setOnClickListener(View.OnClickListener {
 
             val db = DBManager(context)
             var userId = currentUser?.uid
 
             if (userId != null) {
-                db.addUserBookmark(userId, info.getId())
+                db.deleteUserBookmark(userId, info.getId())
             }
         })
     }

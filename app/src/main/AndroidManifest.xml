@@ -43,6 +43,11 @@
             android:exported="true"
             android:parentActivityName=".MainActivity"
             />
+        <activity
+            android:name=".BookmarkActivity"
+            android:exported="true"
+            android:parentActivityName=".MainActivity"
+            />
     </application>
 
 </manifest>

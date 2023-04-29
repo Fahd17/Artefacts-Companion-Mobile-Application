@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity(){
 
         val db = DBManager(this)
 
+
         atrefacts = db.populateArtefactsList()
 
         val textRecyclerView = findViewById<View>(R.id.artefacts_menu) as RecyclerView
@@ -32,9 +33,14 @@ class MainActivity : AppCompatActivity(){
         val newIntent2 = Intent(this, LoginActivity::class.java)
         startActivity(newIntent2)
     }
+    fun addDate(view: View){
+        val newIntent2 = Intent(this, BookmarkActivity::class.java)
+        startActivity(newIntent2)
+    }
 
-    /**
-    fun addDate(view: View): ArrayList<Artefact>{
+
+
+    fun addDate1(view: View): ArrayList<Artefact>{
 
         var list = populateList()
 
@@ -50,7 +56,6 @@ class MainActivity : AppCompatActivity(){
 
 
     }
-    **/
 
     private fun populateList(): ArrayList<Artefact>{
         var list = ArrayList<Artefact>()
