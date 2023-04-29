@@ -12,32 +12,31 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-
-class LoginActivity: AppCompatActivity() {
+class RegisterActivity: AppCompatActivity()  {
 
     private var auth =  Firebase.auth
     private var currentUser = auth.currentUser
 
-
     lateinit var emailText : EditText
     lateinit var passwordText : EditText
-    lateinit var loginbutton : Button
+    lateinit var passwordVerifyText : EditText
+    lateinit var regiterbutton : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.login)
-
+        setContentView(R.layout.register)
 
 
         emailText = findViewById<EditText>(R.id.email_text_field)
         passwordText = findViewById<EditText>(R.id.password_text_field)
-        loginbutton = findViewById<Button>(R.id.login_button)
-
+        passwordVerifyText = findViewById<EditText>(R.id.password_verify_text_field)
+        regiterbutton = findViewById<Button>(R.id.register_button)
     }
 
     override fun onStart(){
         super.onStart()
     }
+
     fun update(){
 
         currentUser = auth.currentUser
@@ -46,46 +45,39 @@ class LoginActivity: AppCompatActivity() {
         if (currentUserEmail == null){
             // in case they not logged in
         } else {
-            redirectToArtefactMenu()
+            val newIntent = Intent(this, MainActivity::class.java)
+            startActivity(newIntent)
         }
     }
 
-    fun loginClick (view: View) {
-
-        auth.signInWithEmailAndPassword(
-            emailText.text.toString(),
-            passwordText.text.toString()
-        ).addOnCompleteListener(this){
-            task ->
-            if (task.isSuccessful){
-                closeKeyBoard()
-                update()
+    fun registerClick(view: View) {
+        currentUser = auth.currentUser
+        if (currentUser != null){
+            displayMassage(view, getString(R.string.register_while_logged_in))
+        } else {
+            if (passwordText.text.toString().equals(passwordVerifyText.text.toString())){
+                auth.createUserWithEmailAndPassword(
+                emailText.text.toString(),
+                passwordText.text.toString()
+                ).addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        closeKeyBoard()
+                        update()
+                    } else {
+                        closeKeyBoard()
+                        displayMassage(
+                            regiterbutton, task.exception?.message.toString()
+                        )
+                    }
+                }
             } else {
-                closeKeyBoard()
                 displayMassage(
-                    loginbutton, task.exception?.message.toString()
+                    regiterbutton, R.string.password_not_matching.toString()
                 )
             }
+
         }
-    }
 
-    fun logoutClick (view: View){
-        auth.signOut()
-        update()
-    }
-
-    fun loginAsGuest (view: View){
-        redirectToArtefactMenu()
-    }
-
-    private fun redirectToArtefactMenu () {
-        val newIntent = Intent(this, MainActivity::class.java)
-        startActivity(newIntent)
-    }
-
-    fun goRegister (view: View) {
-        val newIntent = Intent(this, RegisterActivity::class.java)
-        startActivity(newIntent)
     }
 
     private fun displayMassage(view: View, msgTxt: String) {
@@ -93,6 +85,11 @@ class LoginActivity: AppCompatActivity() {
         sb.show()
 
 
+    }
+
+    fun goLogin (view: View) {
+        val newIntent = Intent(this, LoginActivity::class.java)
+        startActivity(newIntent)
     }
 
     private fun closeKeyBoard() {

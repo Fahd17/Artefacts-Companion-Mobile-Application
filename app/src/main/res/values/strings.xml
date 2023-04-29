@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">CSC-306-CW</string>
+    <string name="register_title">Register</string>
+    <string name="register_while_logged_in">You are already logged in!</string>
+    <string name="password_not_matching">The passwords are not matching!</string>
 </resources>

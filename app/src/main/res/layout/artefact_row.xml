@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="160dp"
     android:layout_marginBottom="10dp"
-    android:clickable="true"
-    android:onClick="launch">
+    android:clickable="true">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/artefactRow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="8dp"

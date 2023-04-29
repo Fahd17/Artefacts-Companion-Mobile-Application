@@ -1,7 +1,11 @@
 package com.example.csc_306_cw
 
-class Artefact {
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
+class Artefact (){
+
+    private var id: Int? = null
     private var artefactName: String? = null
     private var artefactMainImage: Int = 0
     private var metaData: String? = null
@@ -10,6 +14,13 @@ class Artefact {
 
     private var modalities: ArrayList<Int> = ArrayList<Int>()
 
+    fun getId(): Int? {
+        return id
+    }
+
+    fun setId(id: Int){
+        this.id = id
+    }
     fun getName(): String {
         return artefactName.toString()
     }
@@ -57,6 +68,32 @@ class Artefact {
         modalities.add(modality)
     }
 
+    fun paragraphsToJson (paragraphs: HashMap<String, String>): String {
+
+        val gson = Gson()
+        val json = gson.toJson(paragraphs)
+        return json;
+    }
+
+    fun jsonToParagraphs (json: String): HashMap<String, String> {
+        val type = object : TypeToken<HashMap<String, String>>() {}.type
+        val paragraphs = Gson().fromJson<HashMap<String, String>>(json, type)
+        return paragraphs
+    }
+
+    fun modalitiesToJson (modalities: ArrayList<Int>): String{
+
+        val gson = Gson()
+        val json = gson.toJson(modalities)
+        return json
+    }
+
+    fun jsonToModalities (json: String): ArrayList<Int> {
+
+        val type = object : TypeToken<ArrayList<Int>>() {}.type
+        val modalities = Gson().fromJson<ArrayList<Int>>(json, type)
+        return modalities
+    }
 
 
 }

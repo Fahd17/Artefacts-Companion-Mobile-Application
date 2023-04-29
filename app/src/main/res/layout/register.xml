@@ -22,15 +22,15 @@
             android:layout_marginTop="8dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="8dp"
-            android:text="Login"
+            android:text="@string/register_title"
             android:textColor="#F4F1F1"
             android:textSize="48sp" />
     </LinearLayout>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="354dp"
-        android:layout_height="325dp"
+        android:layout_width="358dp"
+        android:layout_height="398dp"
         android:layout_marginTop="20dp"
         android:elevation="10dp"
         app:cardCornerRadius="20dp"
@@ -59,69 +59,54 @@
                 android:id="@+id/password_text_field"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="50dp"
                 android:ems="10"
-                android:hint="Password"
+                android:hint="Enter password"
                 android:inputType="textPassword"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.514"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/email_text_field" />
 
-            <Button
-                android:id="@+id/login_button"
+            <EditText
+                android:id="@+id/password_verify_text_field"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:onClick="loginClick"
-                android:text="@string/common_signin_button_text"
-                app:cornerRadius="4dp"
+                android:layout_marginTop="50dp"
+                android:ems="10"
+                android:hint="Re-enter password"
+                android:inputType="textPassword"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.504"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/password_text_field" />
 
-            <TextView
-                android:id="@+id/forgot_password"
-                android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/register_button"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="forgot password?"
+                android:onClick="registerClick"
+                android:text="Create account"
+                app:cornerRadius="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.509"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/login_button"
-                app:layout_constraintVertical_bias="0.173" />
+                app:layout_constraintTop_toBottomOf="@+id/password_verify_text_field"
+                app:layout_constraintVertical_bias="0.492" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-    <Button
-        android:id="@+id/guest_log_in_button"
-        style="@style/Widget.Material3.Button.OutlinedButton"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:onClick="loginAsGuest"
-        android:text="Guest"
-        android:textColor="?attr/colorOnSecondary"
-        app:cornerRadius="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/login_view_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView"
-        app:layout_constraintVertical_bias="0.171" />
-
     <TextView
         android:id="@+id/login_view_button"
-        android:layout_width="83dp"
-        android:layout_height="38dp"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:onClick="goRegister"
-        android:text="Register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:onClick="goLogin"
+        android:text="Login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
 

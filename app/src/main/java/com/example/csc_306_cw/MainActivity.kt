@@ -2,20 +2,11 @@ package com.example.csc_306_cw
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.example.csc_306_cw.database.DBManager
 
 class MainActivity : AppCompatActivity(){
 
@@ -24,7 +15,9 @@ class MainActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.artefact_menu)
 
-        atrefacts = popilateList()
+        val db = DBManager(this)
+
+        atrefacts = db.populateArtefactsList()
 
         val textRecyclerView = findViewById<View>(R.id.artefacts_menu) as RecyclerView
         val layoutManger =  LinearLayoutManager(this)
@@ -35,23 +28,31 @@ class MainActivity : AppCompatActivity(){
 
     }
 
-    fun launch(view: View){
-
-        val newIntent = Intent(this, ArtefactPageActivity::class.java)
-        startActivity(newIntent)
-    }
-
     fun launch2(view: View){
         val newIntent2 = Intent(this, LoginActivity::class.java)
         startActivity(newIntent2)
     }
 
-    public fun getArtefacts():  ArrayList<Artefact>{
+    /**
+    fun addDate(view: View): ArrayList<Artefact>{
 
-        return atrefacts
+        var list = populateList()
+
+        val db = DBManager(this)
+
+        for (i in 0 .. 6 ){
+            var artifact = list.get(i)
+            db.addArtefact(artifact.getName(), artifact.getImage(), artifact.getMeta(),
+                artifact.paragraphsToJson(artifact.getArtefactParagraphs()), artifact.modalitiesToJson(artifact.getArtefactModalities()))
+        }
+
+        return list
+
+
     }
+    **/
 
-    private fun popilateList(): ArrayList<Artefact>{
+    private fun populateList(): ArrayList<Artefact>{
         var list = ArrayList<Artefact>()
 
         val mainImages = arrayOf(
