@@ -15,8 +15,11 @@ import com.example.csc_306_cw.database.DBManager
 class NewArtefactFormAdapter: AppCompatActivity() {
     private lateinit var paragraphsContainer: LinearLayout
     private lateinit var addParagraphButton: Button
+    private lateinit var addModalitiesButton: Button
     private  var image: ByteArray?  = null
     private val PICK_IMAGE_REQUEST = 1
+    var mainImageCheck: Boolean = false
+    var modalities : ArrayList<Int> = ArrayList<Int>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,15 +29,21 @@ class NewArtefactFormAdapter: AppCompatActivity() {
         paragraphsContainer = findViewById(R.id.paragraphs_container)
         addParagraphButton = findViewById(R.id.add_paragraph_button)
 
-        // Listen to "Add Paragraph" button click
         addParagraphButton.setOnClickListener {
             addParagraphView()
         }
+
     }
 
 
 
-    fun openImagePicker(view: View) {
+    fun mainImagePicker(view: View) {
+        mainImageCheck = true
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST)
+    }
+    fun modalityImagePicker(view: View) {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST)
@@ -48,18 +57,30 @@ class NewArtefactFormAdapter: AppCompatActivity() {
             val inputStream = uri?.let { contentResolver.openInputStream(it) }
             val bytes = inputStream?.readBytes()
             inputStream?.close()
-            image = bytes
+            if(mainImageCheck) {
+                image = bytes
+                mainImageCheck = false
+            } else {
+                addModality(bytes)
+            }
         }
     }
 
 
-    // Programmatically add new paragraph view to the paragraphs container
+
     private fun addParagraphView() {
         val inflater = LayoutInflater.from(this)
         Log.d("testing", "number of paragraphs " + paragraphsContainer.childCount.toString())
 
         val view = inflater.inflate(R.layout.artefact_new_paragraph, paragraphsContainer, false)
         paragraphsContainer.addView(view)
+    }
+
+    private fun addModality( bytes: ByteArray?) {
+
+        val db = DBManager(this)
+        var id = db.addModality(bytes)
+        modalities.add(id)
     }
 
     fun createArtefact (view: View) {
@@ -75,7 +96,7 @@ class NewArtefactFormAdapter: AppCompatActivity() {
         val db = DBManager(this)
         val artefact = Artefact()
         db.addArtefact(name, image, "Author: ".plus(author).plus(", Produced: ".plus(year)),
-            artefact.paragraphsToJson(populateParagraphs()), artefact.modalitiesToJson(popilateModalities()))
+            artefact.paragraphsToJson(populateParagraphs()), artefact.modalitiesToJson(modalities))
 
     }
 
@@ -90,18 +111,6 @@ class NewArtefactFormAdapter: AppCompatActivity() {
             paragraphs.put(title.text.toString(), body.text.toString())
         }
         return paragraphs
-    }
-
-    private fun popilateModalities(): ArrayList<Int>{
-
-        var modalities : ArrayList<Int> = ArrayList<Int>()
-
-        modalities.add(R.drawable.next1)
-        modalities.add(R.drawable.next2)
-        modalities.add(R.drawable.next4)
-        modalities.add(R.drawable.next5)
-        return modalities
-
     }
 
 

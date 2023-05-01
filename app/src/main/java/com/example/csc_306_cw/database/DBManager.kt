@@ -19,9 +19,13 @@ private const val COlUMN_ARTEFACT_META_DATA = "artefactMetaData"
 private const val COlUMN_ARTEFACT_PARAGRAPHS = "artefactParagraphs"
 private const val COlUMN_ARTEFACT_MODALITIES = "artefactModalities"
 
-private const val TABLE_BOOKMARK = "bookmark"
+private const val TABLE_BOOKMARK = "bookmarks"
 private const val COlUMN_BOOKMARK_ID = "bookmarkId"
 private const val COlUMN_USER_ID = "UserId"
+
+private const val TABLE_MODALITY = "modalities"
+private const val COlUMN_MODALITY_ID = "modalityId"
+private const val COlUMN_MODALITY_BODY = "modalityBody"
 
 
 class DBManager(context: Context) :
@@ -40,6 +44,10 @@ class DBManager(context: Context) :
             "CREATE TABLE $TABLE_BOOKMARK($COlUMN_BOOKMARK_ID INTEGER PRIMARY KEY, $COlUMN_ARTEFACT_ID INTEGER, $COlUMN_USER_ID TEXT)"
         db.execSQL(CREATE_BOOKMARK_TABLE)
 
+        val CREATE_MODALITY_TABLE =
+            "CREATE TABLE $TABLE_MODALITY($COlUMN_MODALITY_ID INTEGER PRIMARY KEY, $COlUMN_MODALITY_BODY BLOB)"
+        db.execSQL(CREATE_MODALITY_TABLE)
+
         Log.d("testing", "Create database")
     }
 
@@ -47,6 +55,7 @@ class DBManager(context: Context) :
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL("DROP TABLE IF EXISTS $TABLE_ARTEFACT")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_BOOKMARK")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_MODALITY")
         onCreate(db)
     }
 
@@ -112,6 +121,34 @@ class DBManager(context: Context) :
         cursor.close()
         return artefactsList
     }
+
+    fun addModality (modalityImage: ByteArray?): Int{
+
+        val values = ContentValues()
+        values.put(COlUMN_MODALITY_BODY, modalityImage)
+
+        val db = this.writableDatabase
+        return db.insert(TABLE_MODALITY, null, values).toInt()
+
+    }
+
+    fun getModality (id: Int): ByteArray?{
+
+        val query = "SELECT * FROM $TABLE_MODALITY WHERE $COlUMN_MODALITY_ID = $id"
+        val db = this.writableDatabase
+        var foundModality: ByteArray? = null
+
+        val cursor = db.rawQuery(query, null)
+
+        if (cursor.moveToFirst()) {
+            foundModality = cursor.getBlob(1)
+        }
+        cursor.close()
+        return foundModality
+
+    }
+
+
 
     fun addArtefact(
         name: String,
