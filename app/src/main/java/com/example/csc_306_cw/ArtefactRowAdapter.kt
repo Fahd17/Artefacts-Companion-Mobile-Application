@@ -2,6 +2,7 @@ package com.example.csc_306_cw
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -41,7 +42,8 @@ class ArtefactRowAdapter(private val artefacts: ArrayList<Artefact>): RecyclerVi
     override fun onBindViewHolder(holder: ArtefactRowAdapter.ViewHolder, position: Int) {
         val info = artefacts[position]
 
-        holder.artefactImage.setImageResource(info.getImage())
+        val imageBitmap = BitmapFactory.decodeByteArray(info.getImage(), 0, info.getImage()!!.size)
+        holder.artefactImage.setImageBitmap(imageBitmap)
         holder.artefactName.text = info.getName()
         holder.artefactMeta.text = info.getMeta()
 

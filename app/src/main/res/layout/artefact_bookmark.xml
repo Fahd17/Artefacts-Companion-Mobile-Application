@@ -25,13 +25,13 @@
     </androidx.recyclerview.widget.RecyclerView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/navigation"
+        android:id="@+id/navigation_bar"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:background="?attr/colorSecondary"
-        app:menu="@menu/my_navigation_items"
-        app:itemRippleColor="?attr/colorOnSecondary" />
+        app:itemRippleColor="?attr/colorOnSecondary"
+        app:menu="@menu/my_navigation_items" />
 
 
 </LinearLayout>

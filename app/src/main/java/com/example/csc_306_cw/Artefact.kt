@@ -7,7 +7,7 @@ class Artefact (){
 
     private var id: Int? = null
     private var artefactName: String? = null
-    private var artefactMainImage: Int = 0
+    private var artefactMainImage: ByteArray? =null
     private var metaData: String? = null
 
     private var paragraphs : HashMap<String, String> = HashMap<String, String> ()
@@ -29,11 +29,11 @@ class Artefact (){
         this.artefactName = name
     }
 
-    fun getImage(): Int {
+    fun getImage(): ByteArray? {
         return artefactMainImage
     }
 
-    fun setImage(image: Int){
+    fun setImage(image: ByteArray){
         this.artefactMainImage = image
     }
 

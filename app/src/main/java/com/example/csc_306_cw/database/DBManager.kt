@@ -31,7 +31,7 @@ class DBManager(context: Context) :
 
         val CREATE_ARTEFACT_TABLE =
             "CREATE TABLE $TABLE_ARTEFACT($COlUMN_ARTEFACT_ID INTEGER PRIMARY KEY, " +
-                    "$COlUMN_ARTEFACT_NAME TEXT, $COlUMN_ARTEFACT_MAIN_IMAGE INTEGER," +
+                    "$COlUMN_ARTEFACT_NAME TEXT, $COlUMN_ARTEFACT_MAIN_IMAGE BLOB," +
                     "$COlUMN_ARTEFACT_META_DATA TEXT, $COlUMN_ARTEFACT_PARAGRAPHS TEXT, " +
                     "$COlUMN_ARTEFACT_MODALITIES)"
         db.execSQL(CREATE_ARTEFACT_TABLE)
@@ -99,6 +99,7 @@ class DBManager(context: Context) :
         val sql = "SELECT * FROM $TABLE_ARTEFACT"
         val db = this.readableDatabase
 
+
         val artefactsList = arrayListOf<Artefact>()
 
         val cursor = db.rawQuery(sql, null)
@@ -114,12 +115,13 @@ class DBManager(context: Context) :
 
     fun addArtefact(
         name: String,
-        mainImage: Int,
+        mainImage: ByteArray?,
         metadata: String,
         paragraphs: String,
         modalities: String
     ) {
 
+        Log.d("testing","add artefact" )
         val values = ContentValues()
         values.put(COlUMN_ARTEFACT_NAME, name)
         values.put(COlUMN_ARTEFACT_MAIN_IMAGE, mainImage)
@@ -184,7 +186,7 @@ class DBManager(context: Context) :
         var artefact: Artefact? = null
         val id = Integer.parseInt(cursor.getString(0))
         val artefactName = cursor.getString(1)
-        val artefactMainImage = Integer.parseInt(cursor.getString(2))
+        val artefactMainImage = cursor.getBlob(2)
         val artefactMetaData = cursor.getString(3)
         val artefactParagraph = cursor.getString(4)
         val artefactModalities = cursor.getString(5)

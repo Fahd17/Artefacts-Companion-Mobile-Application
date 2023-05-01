@@ -1,5 +1,6 @@
 package com.example.csc_306_cw
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -39,9 +40,11 @@ class ArtefactPageActivity : FragmentActivity(), OnMapReadyCallback {
         var name = findViewById<View>(R.id.Title) as TextView
         name.text = atrefact.getName()
 
+
         // setting the MainImage
         var mainImage = findViewById<View>(R.id.main_image) as ImageView
-        mainImage.setImageResource(atrefact.getImage())
+        val imageBitmap = BitmapFactory.decodeByteArray(atrefact.getImage(), 0, atrefact.getImage()!!.size)
+        mainImage.setImageBitmap(imageBitmap)
 
         //Setting the text recycler View
         val textRecyclerView = findViewById<View>(R.id.text_holder) as RecyclerView
