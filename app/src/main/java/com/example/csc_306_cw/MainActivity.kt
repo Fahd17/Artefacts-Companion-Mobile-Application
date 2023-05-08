@@ -1,21 +1,13 @@
 package com.example.csc_306_cw
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.csc_306_cw.database.DBManager
-import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.io.ByteArrayOutputStream
 
 class MainActivity : AppCompatActivity(){
 
@@ -24,10 +16,15 @@ class MainActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.artefact_menu)
 
+        populateRecycleView()
+
+        navigationItemSelectedListener()
+    }
+
+    private fun populateRecycleView(){
         val db = DBManager(this)
 
         atrefacts = db.populateArtefactsList()
-
         val textRecyclerView = findViewById<View>(R.id.artefacts_menu) as RecyclerView
         val layoutManger =  LinearLayoutManager(this)
         textRecyclerView.layoutManager = layoutManger
@@ -35,7 +32,18 @@ class MainActivity : AppCompatActivity(){
         val artefactMenuAdapter = ArtefactRowAdapter(atrefacts)
         textRecyclerView.adapter= artefactMenuAdapter
 
-        navigationItemSelectedListener()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        populateRecycleView()
+
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        populateRecycleView()
     }
 
     private fun navigationItemSelectedListener(){
@@ -59,6 +67,11 @@ class MainActivity : AppCompatActivity(){
     }
     fun launch2(view: View){
         val newIntent2 = Intent(this, NewArtefactFormAdapter::class.java)
+        startActivity(newIntent2)
+    }
+
+    fun launch(view: View){
+        val newIntent2 = Intent(this, LoginActivity::class.java)
         startActivity(newIntent2)
     }
 

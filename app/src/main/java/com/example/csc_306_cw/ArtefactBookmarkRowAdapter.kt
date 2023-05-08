@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.csc_306_cw.database.DBManager
 import com.google.firebase.auth.ktx.auth
@@ -55,11 +54,14 @@ class ArtefactBookmarkRowAdapter(private val artefacts: ArrayList<Artefact>): Re
             Log.d("testing",info.getId().toString() )
             context.startActivity(newIntent)
         })
-        var frmoveFromBookmark = holder.itemView.findViewById<Button>(R.id.remove_from_bookmark)as Button
-        frmoveFromBookmark.setOnClickListener(View.OnClickListener {
+        var removeFromBookmark = holder.itemView.findViewById<Button>(R.id.remove_from_bookmark)as Button
+        removeFromBookmark.setOnClickListener(View.OnClickListener {
 
             val db = DBManager(context)
             var userId = currentUser?.uid
+            artefacts.removeAt(position)
+            notifyItemRemoved(position)
+
 
             if (userId != null) {
                 db.deleteUserBookmark(userId, info.getId())

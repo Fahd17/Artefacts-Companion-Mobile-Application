@@ -39,7 +39,10 @@ class BookmarkActivity : AppCompatActivity(){
 
         val artefactMenuAdapter = ArtefactBookmarkRowAdapter(atrefacts)
         textRecyclerView.adapter= artefactMenuAdapter
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation_bar)
+        bottomNavigationView.selectedItemId= R.id.bookmark
         navigationItemSelectedListener()
+
     }
 
     private fun navigationItemSelectedListener(){

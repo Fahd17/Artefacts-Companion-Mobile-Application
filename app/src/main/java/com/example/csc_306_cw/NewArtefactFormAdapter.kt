@@ -98,6 +98,7 @@ class NewArtefactFormAdapter: AppCompatActivity() {
         db.addArtefact(name, image, "Author: ".plus(author).plus(", Produced: ".plus(year)),
             artefact.paragraphsToJson(populateParagraphs()), artefact.modalitiesToJson(modalities))
 
+        //TODO:return to home view  and snack bar
     }
 
     private fun populateParagraphs(): HashMap<String, String>{
