@@ -93,6 +93,7 @@
                     android:layout_marginBottom="20dp"
                     app:backgroundTint="?attr/colorSecondaryVariant"
                     android:gravity="end|bottom"
+                    android:onClick="update"
                     android:src="@android:drawable/ic_menu_edit" />
 
             </RelativeLayout>

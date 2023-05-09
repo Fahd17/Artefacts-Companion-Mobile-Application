@@ -58,6 +58,9 @@
         <activity
             android:name="RequestActivity"
             />
+        <activity
+            android:name="UpdateArtefactFormAdapter"
+            />
 
     </application>
 

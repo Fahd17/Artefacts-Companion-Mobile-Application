@@ -212,6 +212,19 @@ class DBManager(context: Context) :
         )
     }
 
+    fun getState(id: Int): String? {
+        val query = "SELECT * FROM $TABLE_ARTEFACT WHERE $COlUMN_ARTEFACT_ID = ?"
+        val db = this.writableDatabase
+        var foundState: String? = null
+        val cursor = db.rawQuery(query, arrayOf(id.toString()), null)
+
+        if (cursor.moveToFirst()) {
+            foundState = cursor.getString(6)
+        }
+        cursor.close()
+        return foundState
+    }
+
     fun findArtefact(id: Int): Artefact? {
 
         val query = "SELECT * FROM $TABLE_ARTEFACT WHERE $COlUMN_ARTEFACT_ID = $id"

@@ -1,7 +1,9 @@
 package com.example.csc_306_cw
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -20,7 +22,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 class ArtefactPageActivity : FragmentActivity(), OnMapReadyCallback {
 
     lateinit var map: GoogleMap
-    lateinit var atrefacts: ArrayList<Artefact>
+    lateinit var atrefact: Artefact
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +36,7 @@ class ArtefactPageActivity : FragmentActivity(), OnMapReadyCallback {
 
         val db = DBManager(this)
         val extras = intent.extras
-        var atrefact = extras?.let { db.findArtefact(it.getInt("id")) }!!
+        atrefact = extras?.let { db.findArtefact(it.getInt("id")) }!!
 
 
         // setting the name
@@ -63,6 +66,12 @@ class ArtefactPageActivity : FragmentActivity(), OnMapReadyCallback {
             ArtefactModalitiesAdapter(atrefact.getArtefactModalities())
         modalitiesRecyclerView.adapter = modalitiesSectionArtefactModalitiesAdapter
 
+    }
+
+    fun update(view: View){
+        val newIntent = Intent(this, UpdateArtefactFormAdapter::class.java)
+        newIntent.putExtra("id", atrefact.getId())
+        startActivity(newIntent)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {

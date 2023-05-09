@@ -52,11 +52,20 @@ class RequestRowAdapter(private val artefacts: ArrayList<Artefact>): RecyclerVie
 
         var approveButton = holder.itemView.findViewById<Button>(R.id.approve_button) as Button
         approveButton.setOnClickListener(View.OnClickListener {
-
             val db = DBManager(context)
-            db.updateArtefact(info, "ready")
-            artefacts.removeAt(position)
-            notifyItemRemoved(position)
+            var state = db.getState(info.getId()!!)
+
+            if (state.equals("new")){
+
+                db.updateArtefact(info, "ready")
+                artefacts.removeAt(position)
+                notifyItemRemoved(position)
+            } else {
+                info.setId(state!!.toInt())
+                db.updateArtefact(info, "ready")
+                artefacts.removeAt(position)
+                notifyItemRemoved(position)
+            }
 
         })
     }
