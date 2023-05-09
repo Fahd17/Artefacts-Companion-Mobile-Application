@@ -60,6 +60,11 @@ class BookmarkActivity : AppCompatActivity(){
                     startActivity(newIntent2)
                     true
                 }
+                R.id.history -> {
+                    val newIntent2 = Intent(this, RequestActivity::class.java)
+                    startActivity(newIntent2)
+                    true
+                }
                 else -> false
             }
         }

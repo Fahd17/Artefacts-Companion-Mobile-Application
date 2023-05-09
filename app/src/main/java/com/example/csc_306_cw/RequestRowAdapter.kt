@@ -61,6 +61,7 @@ class RequestRowAdapter(private val artefacts: ArrayList<Artefact>): RecyclerVie
                 artefacts.removeAt(position)
                 notifyItemRemoved(position)
             } else {
+                db.deleteArtefact(info.getId()!!)
                 info.setId(state!!.toInt())
                 db.updateArtefact(info, "ready")
                 artefacts.removeAt(position)
