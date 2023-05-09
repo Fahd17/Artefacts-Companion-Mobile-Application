@@ -18,6 +18,7 @@ private const val COlUMN_ARTEFACT_MAIN_IMAGE = "artefactMainImage"
 private const val COlUMN_ARTEFACT_META_DATA = "artefactMetaData"
 private const val COlUMN_ARTEFACT_PARAGRAPHS = "artefactParagraphs"
 private const val COlUMN_ARTEFACT_MODALITIES = "artefactModalities"
+private const val COlUMN_ARTEFACT_STATE = "artefactState"
 
 private const val TABLE_BOOKMARK = "bookmarks"
 private const val COlUMN_BOOKMARK_ID = "bookmarkId"
@@ -37,7 +38,7 @@ class DBManager(context: Context) :
             "CREATE TABLE $TABLE_ARTEFACT($COlUMN_ARTEFACT_ID INTEGER PRIMARY KEY, " +
                     "$COlUMN_ARTEFACT_NAME TEXT, $COlUMN_ARTEFACT_MAIN_IMAGE BLOB," +
                     "$COlUMN_ARTEFACT_META_DATA TEXT, $COlUMN_ARTEFACT_PARAGRAPHS TEXT, " +
-                    "$COlUMN_ARTEFACT_MODALITIES)"
+                    "$COlUMN_ARTEFACT_MODALITIES, $COlUMN_ARTEFACT_STATE TEXT)"
         db.execSQL(CREATE_ARTEFACT_TABLE)
 
         val CREATE_BOOKMARK_TABLE =
@@ -102,17 +103,21 @@ class DBManager(context: Context) :
         db.close()
     }
 
-    fun populateArtefactsList(): ArrayList<Artefact> {
-
-
-        val sql = "SELECT * FROM $TABLE_ARTEFACT"
+    fun populateArtefactsList(state: String): ArrayList<Artefact> {
+        val sql = if (state == "ready") {
+            "SELECT * FROM $TABLE_ARTEFACT WHERE $COlUMN_ARTEFACT_STATE = ?"
+        } else {
+            "SELECT * FROM $TABLE_ARTEFACT WHERE $COlUMN_ARTEFACT_STATE != 'ready'"
+        }
         val db = this.readableDatabase
-
 
         val artefactsList = arrayListOf<Artefact>()
 
-        val cursor = db.rawQuery(sql, null)
-
+        val cursor = if (state == "ready") {
+            db.rawQuery(sql, arrayOf(state))
+        } else {
+            db.rawQuery(sql, null)
+        }
         if (cursor.moveToFirst()) {
             do {
                 artefactsList.add(constructArtefact(cursor))
@@ -148,14 +153,13 @@ class DBManager(context: Context) :
 
     }
 
-
-
     fun addArtefact(
         name: String,
         mainImage: ByteArray?,
         metadata: String,
         paragraphs: String,
-        modalities: String
+        modalities: String,
+        state: String
     ) {
 
         Log.d("testing","add artefact" )
@@ -165,6 +169,7 @@ class DBManager(context: Context) :
         values.put(COlUMN_ARTEFACT_META_DATA, metadata)
         values.put(COlUMN_ARTEFACT_PARAGRAPHS, paragraphs)
         values.put(COlUMN_ARTEFACT_MODALITIES, modalities)
+        values.put(COlUMN_ARTEFACT_STATE, state)
 
         val db = this.writableDatabase
         db.insert(TABLE_ARTEFACT, null, values)
@@ -178,7 +183,7 @@ class DBManager(context: Context) :
         db.delete(TABLE_ARTEFACT, query, arrayOf(id.toString()))
     }
 
-    fun updateArtefact(artefact: Artefact) {
+    fun updateArtefact(artefact: Artefact, state: String) {
 
         val values = ContentValues()
         values.put(COlUMN_ARTEFACT_NAME, artefact.getName())
@@ -191,6 +196,10 @@ class DBManager(context: Context) :
         values.put(
             COlUMN_ARTEFACT_MODALITIES,
             artefact.modalitiesToJson(artefact.getArtefactModalities())
+        )
+        values.put(
+            COlUMN_ARTEFACT_STATE,
+            state
         )
 
         val db = this.writableDatabase

@@ -16,7 +16,7 @@
         android:theme="?attr/actionBarTheme" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/artefacts_bookmark"
+        android:id="@+id/artefacts_secondly_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="9"

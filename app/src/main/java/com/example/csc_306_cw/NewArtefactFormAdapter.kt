@@ -96,9 +96,10 @@ class NewArtefactFormAdapter: AppCompatActivity() {
         val db = DBManager(this)
         val artefact = Artefact()
         db.addArtefact(name, image, "Author: ".plus(author).plus(", Produced: ".plus(year)),
-            artefact.paragraphsToJson(populateParagraphs()), artefact.modalitiesToJson(modalities))
+            artefact.paragraphsToJson(populateParagraphs()), artefact.modalitiesToJson(modalities), "new")
 
-        //TODO:return to home view  and snack bar
+
+        startActivity(Intent(this, MainActivity::class.java))
     }
 
     private fun populateParagraphs(): HashMap<String, String>{

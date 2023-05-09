@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity(){
     private fun populateRecycleView(){
         val db = DBManager(this)
 
-        atrefacts = db.populateArtefactsList()
+        atrefacts = db.populateArtefactsList("ready")
         val textRecyclerView = findViewById<View>(R.id.artefacts_menu) as RecyclerView
         val layoutManger =  LinearLayoutManager(this)
         textRecyclerView.layoutManager = layoutManger
@@ -58,6 +58,11 @@ class MainActivity : AppCompatActivity(){
                 }
                 R.id.bookmark -> {
                     val newIntent2 = Intent(this, BookmarkActivity::class.java)
+                    startActivity(newIntent2)
+                    true
+                }
+                R.id.history -> {
+                    val newIntent2 = Intent(this, RequestActivity::class.java)
                     startActivity(newIntent2)
                     true
                 }
