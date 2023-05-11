@@ -12,9 +12,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-class BookmarkActivity : AppCompatActivity(){
+class BookmarkActivity : AppCompatActivity() {
 
-    private var auth =  Firebase.auth
+    private var auth = Firebase.auth
     private var currentUser = auth.currentUser
 
     var atrefacts: ArrayList<Artefact> = ArrayList<Artefact>()
@@ -25,7 +25,7 @@ class BookmarkActivity : AppCompatActivity(){
         val currentUserId = currentUser?.uid
 
         if (currentUserId != null) {
-            Log.d("testing",currentUserId )
+            Log.d("testing", currentUserId)
         }
 
         if (currentUserId != null) {
@@ -34,41 +34,42 @@ class BookmarkActivity : AppCompatActivity(){
         }
 
         val textRecyclerView = findViewById<View>(R.id.artefacts_secondly_menu) as RecyclerView
-        val layoutManger =  LinearLayoutManager(this)
+        val layoutManger = LinearLayoutManager(this)
         textRecyclerView.layoutManager = layoutManger
 
         val artefactMenuAdapter = ArtefactBookmarkRowAdapter(atrefacts)
-        textRecyclerView.adapter= artefactMenuAdapter
+        textRecyclerView.adapter = artefactMenuAdapter
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation_bar)
-        bottomNavigationView.selectedItemId= R.id.bookmark
+        bottomNavigationView.selectedItemId = R.id.bookmark
         navigationItemSelectedListener()
 
     }
 
-    private fun navigationItemSelectedListener(){
+    private fun navigationItemSelectedListener() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation_bar)
 
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home_page -> {
-                    val newIntent2 = Intent(this, MainActivity::class.java)
-                    startActivity(newIntent2)
+                    val artefactMenu = Intent(this, MainActivity::class.java)
+                    startActivity(artefactMenu)
                     true
                 }
                 R.id.bookmark -> {
-                    val newIntent2 = Intent(this, BookmarkActivity::class.java)
-                    startActivity(newIntent2)
+                    val bookmark = Intent(this, BookmarkActivity::class.java)
+                    startActivity(bookmark)
                     true
                 }
                 R.id.history -> {
-                    val newIntent2 = Intent(this, RequestActivity::class.java)
-                    startActivity(newIntent2)
+                    val requestsMenu = Intent(this, RequestActivity::class.java)
+                    startActivity(requestsMenu)
                     true
-                } R.id.settings -> {
-                val newIntent2 = Intent(this, UsersRolesActivity::class.java)
-                startActivity(newIntent2)
-                true
-            }
+                }
+                R.id.settings -> {
+                    val role = Intent(this, UsersRolesActivity::class.java)
+                    startActivity(role)
+                    true
+                }
                 else -> false
             }
         }

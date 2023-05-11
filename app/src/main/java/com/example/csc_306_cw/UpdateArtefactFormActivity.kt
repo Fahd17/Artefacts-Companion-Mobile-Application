@@ -28,11 +28,9 @@ class UpdateArtefactFormActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.new_artefact_form)
+        setContentView(R.layout.update_artefact_form)
 
         nameText = findViewById<EditText>(R.id.name_text_field)
-        authorText = findViewById<EditText>(R.id.author_text_filed)
-        yearText = findViewById<EditText>(R.id.production_year)
         paragraphsContainer = findViewById(R.id.paragraphs_container)
         addParagraphButton = findViewById(R.id.add_paragraph_button)
 
@@ -50,7 +48,6 @@ class UpdateArtefactFormActivity: AppCompatActivity() {
     private fun fillArtefactData(){
 
         nameText.setText(targetArtefact.getName())
-        authorText.setText(targetArtefact.getMeta())
         image = targetArtefact.getImage()
         modalities = targetArtefact.getArtefactModalities()
 
@@ -120,12 +117,11 @@ class UpdateArtefactFormActivity: AppCompatActivity() {
 
 
         val name = nameText.text.toString()
-        val author = authorText.text.toString()
-        val year = yearText.text.toString()
+
 
         val db = DBManager(this)
         val artefact = Artefact()
-        db.addArtefact(name, image, "Author: ".plus(author).plus(", Produced: ".plus(year)),
+        db.addArtefact(name, image, targetArtefact.getMeta(),
             artefact.paragraphsToJson(populateParagraphs()), artefact.modalitiesToJson(modalities),
             targetArtefact.getId().toString()
         )

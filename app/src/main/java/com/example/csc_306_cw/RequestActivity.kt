@@ -55,23 +55,23 @@ class RequestActivity : AppCompatActivity() {
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home_page -> {
-                    val newIntent2 = Intent(this, MainActivity::class.java)
-                    startActivity(newIntent2)
+                    val artefactMenu = Intent(this, MainActivity::class.java)
+                    startActivity(artefactMenu)
                     true
                 }
                 R.id.bookmark -> {
-                    val newIntent2 = Intent(this, BookmarkActivity::class.java)
-                    startActivity(newIntent2)
+                    val bookmark = Intent(this, BookmarkActivity::class.java)
+                    startActivity(bookmark)
                     true
                 }
                 R.id.history -> {
-                    val newIntent2 = Intent(this, RequestActivity::class.java)
-                    startActivity(newIntent2)
+                    val requestsMenu = Intent(this, RequestActivity::class.java)
+                    startActivity(requestsMenu)
                     true
                 }
                 R.id.settings -> {
-                    val newIntent2 = Intent(this, UsersRolesActivity::class.java)
-                    startActivity(newIntent2)
+                    val role = Intent(this, UsersRolesActivity::class.java)
+                    startActivity(role)
                     true
                 }
                 else -> false

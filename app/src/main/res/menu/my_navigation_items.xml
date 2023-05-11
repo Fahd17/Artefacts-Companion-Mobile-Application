@@ -14,5 +14,6 @@
             android:title="history"/>
 
         <item android:id="@+id/settings"
-            android:icon="@drawable/baseline_settings_24" />
+            android:icon="@drawable/baseline_settings_24"
+            android:title="Roles" />
 </menu>
