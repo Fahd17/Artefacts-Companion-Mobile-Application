@@ -3,11 +3,9 @@ package com.example.csc_306_cw
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -69,7 +67,7 @@ class ArtefactPageActivity : FragmentActivity(), OnMapReadyCallback {
     }
 
     fun update(view: View){
-        val newIntent = Intent(this, UpdateArtefactFormAdapter::class.java)
+        val newIntent = Intent(this, UpdateArtefactFormActivity::class.java)
         newIntent.putExtra("id", atrefact.getId())
         startActivity(newIntent)
     }

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.csc_306_cw.database.DBManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class RequestActivity: AppCompatActivity(){
+class RequestActivity : AppCompatActivity() {
 
     var atrefacts: ArrayList<Artefact> = ArrayList<Artefact>()
 
@@ -20,7 +20,7 @@ class RequestActivity: AppCompatActivity(){
         populateRecycleView()
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation_bar)
-        bottomNavigationView.selectedItemId= R.id.history
+        bottomNavigationView.selectedItemId = R.id.history
         navigationItemSelectedListener()
     }
 
@@ -36,20 +36,20 @@ class RequestActivity: AppCompatActivity(){
         populateRecycleView()
     }
 
-    private fun populateRecycleView(){
+    private fun populateRecycleView() {
         val db = DBManager(this)
 
         atrefacts = db.populateArtefactsList("new")
         val textRecyclerView = findViewById<View>(R.id.artefacts_secondly_menu) as RecyclerView
-        val layoutManger =  LinearLayoutManager(this)
+        val layoutManger = LinearLayoutManager(this)
         textRecyclerView.layoutManager = layoutManger
 
         val artefactMenuAdapter = RequestRowAdapter(atrefacts)
-        textRecyclerView.adapter= artefactMenuAdapter
+        textRecyclerView.adapter = artefactMenuAdapter
 
     }
 
-    private fun navigationItemSelectedListener(){
+    private fun navigationItemSelectedListener() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation_bar)
 
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
@@ -61,6 +61,16 @@ class RequestActivity: AppCompatActivity(){
                 }
                 R.id.bookmark -> {
                     val newIntent2 = Intent(this, BookmarkActivity::class.java)
+                    startActivity(newIntent2)
+                    true
+                }
+                R.id.history -> {
+                    val newIntent2 = Intent(this, RequestActivity::class.java)
+                    startActivity(newIntent2)
+                    true
+                }
+                R.id.settings -> {
+                    val newIntent2 = Intent(this, UsersRolesActivity::class.java)
                     startActivity(newIntent2)
                     true
                 }

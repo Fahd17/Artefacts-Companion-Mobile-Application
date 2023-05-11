@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import com.example.csc_306_cw.database.DBManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -41,10 +42,13 @@ class RegisterActivity: AppCompatActivity()  {
 
         currentUser = auth.currentUser
         val currentUserEmail = currentUser?.email
+        val currentUserId = currentUser?.uid
 
         if (currentUserEmail == null){
             // in case they not logged in
         } else {
+            val db = DBManager(this)
+            db.registerRole(currentUserId!!, "false")
             val newIntent = Intent(this, MainActivity::class.java)
             startActivity(newIntent)
         }

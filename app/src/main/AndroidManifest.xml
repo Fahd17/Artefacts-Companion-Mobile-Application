@@ -51,7 +51,7 @@
             android:parentActivityName=".MainActivity"
             />
         <activity
-            android:name=".NewArtefactFormAdapter"
+            android:name=".NewArtefactFormActivity"
             android:exported="true"
             android:parentActivityName=".MainActivity"
             />
@@ -59,7 +59,10 @@
             android:name="RequestActivity"
             />
         <activity
-            android:name="UpdateArtefactFormAdapter"
+            android:name="UpdateArtefactFormActivity"
+            />
+        <activity
+            android:name=".UsersRolesActivity"
             />
 
     </application>

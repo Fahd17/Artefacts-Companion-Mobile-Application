@@ -65,13 +65,17 @@ class MainActivity : AppCompatActivity(){
                     val newIntent2 = Intent(this, RequestActivity::class.java)
                     startActivity(newIntent2)
                     true
-                }
+                } R.id.settings -> {
+                val newIntent2 = Intent(this, UsersRolesActivity::class.java)
+                startActivity(newIntent2)
+                true
+            }
                 else -> false
             }
         }
     }
     fun launch2(view: View){
-        val newIntent2 = Intent(this, NewArtefactFormAdapter::class.java)
+        val newIntent2 = Intent(this, NewArtefactFormActivity::class.java)
         startActivity(newIntent2)
     }
 

@@ -10,30 +10,22 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.text.Paragraph
 import com.example.csc_306_cw.database.DBManager
 
-class UpdateArtefactFormAdapter: AppCompatActivity() {
-    private lateinit var nameText: EditText
-    private lateinit var authorText: EditText
-    private lateinit var yearText: EditText
+class NewArtefactFormActivity: AppCompatActivity() {
     private lateinit var paragraphsContainer: LinearLayout
     private lateinit var addParagraphButton: Button
     private lateinit var addModalitiesButton: Button
     private  var image: ByteArray?  = null
-    var modalities : ArrayList<Int> = ArrayList<Int>()
     private val PICK_IMAGE_REQUEST = 1
     var mainImageCheck: Boolean = false
-    lateinit var targetArtefact: Artefact
+    var modalities : ArrayList<Int> = ArrayList<Int>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.new_artefact_form)
 
-        nameText = findViewById<EditText>(R.id.name_text_field)
-        authorText = findViewById<EditText>(R.id.author_text_filed)
-        yearText = findViewById<EditText>(R.id.production_year)
         paragraphsContainer = findViewById(R.id.paragraphs_container)
         addParagraphButton = findViewById(R.id.add_paragraph_button)
 
@@ -41,24 +33,9 @@ class UpdateArtefactFormAdapter: AppCompatActivity() {
             addParagraphView()
         }
 
-        val db = DBManager(this)
-        val extras = intent.extras
-        targetArtefact = extras?.let { db.findArtefact(it.getInt("id")) }!!
-
-        fillArtefactData()
     }
 
-    private fun fillArtefactData(){
 
-        nameText.setText(targetArtefact.getName())
-        authorText.setText(targetArtefact.getMeta())
-        image = targetArtefact.getImage()
-        modalities = targetArtefact.getArtefactModalities()
-
-        val paragraphs = targetArtefact.getArtefactParagraphs()
-        addParagraphView(paragraphs)
-
-    }
 
     fun mainImagePicker(view: View) {
         mainImageCheck = true
@@ -66,18 +43,10 @@ class UpdateArtefactFormAdapter: AppCompatActivity() {
         intent.type = "image/*"
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST)
     }
-
     fun modalityImagePicker(view: View) {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST)
-    }
-
-    private fun addModality( bytes: ByteArray?) {
-
-        val db = DBManager(this)
-        var id = db.addModality(bytes)
-        modalities.add(id)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -97,15 +66,7 @@ class UpdateArtefactFormAdapter: AppCompatActivity() {
         }
     }
 
-    private fun addParagraphView(paragraphs: HashMap<String, String>) {
-        for ((heading, body) in paragraphs) {
-            val inflater = LayoutInflater.from(this)
-            val view = inflater.inflate(R.layout.artefact_new_paragraph, paragraphsContainer, false)
-            view.findViewById<EditText>(R.id.paragraph_heading).setText(heading)
-            view.findViewById<EditText>(R.id.paragraph_body).setText(body)
-            paragraphsContainer.addView(view)
-        }
-    }
+
 
     private fun addParagraphView() {
         val inflater = LayoutInflater.from(this)
@@ -115,21 +76,27 @@ class UpdateArtefactFormAdapter: AppCompatActivity() {
         paragraphsContainer.addView(view)
     }
 
+    private fun addModality( bytes: ByteArray?) {
 
+        val db = DBManager(this)
+        var id = db.addModality(bytes)
+        modalities.add(id)
+    }
 
     fun createArtefact (view: View) {
 
-
+        val nameText = findViewById<EditText>(R.id.name_text_field)
         val name = nameText.text.toString()
+
+        val authorText = findViewById<EditText>(R.id.author_text_filed)
         val author = authorText.text.toString()
+        val yearText = findViewById<EditText>(R.id.production_year)
         val year = yearText.text.toString()
 
         val db = DBManager(this)
         val artefact = Artefact()
         db.addArtefact(name, image, "Author: ".plus(author).plus(", Produced: ".plus(year)),
-            artefact.paragraphsToJson(populateParagraphs()), artefact.modalitiesToJson(modalities),
-            targetArtefact.getId().toString()
-        )
+            artefact.paragraphsToJson(populateParagraphs()), artefact.modalitiesToJson(modalities), "new")
 
 
         startActivity(Intent(this, MainActivity::class.java))

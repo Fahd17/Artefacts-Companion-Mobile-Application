@@ -20,6 +20,10 @@ private const val COlUMN_ARTEFACT_PARAGRAPHS = "artefactParagraphs"
 private const val COlUMN_ARTEFACT_MODALITIES = "artefactModalities"
 private const val COlUMN_ARTEFACT_STATE = "artefactState"
 
+private const val TABLE_ROLE = "roles"
+private const val COlUMN_ROLE_ID = "roleId"
+private const val COlUMN_IS_ADMIN = "isAdmin"
+
 private const val TABLE_BOOKMARK = "bookmarks"
 private const val COlUMN_BOOKMARK_ID = "bookmarkId"
 private const val COlUMN_USER_ID = "UserId"
@@ -41,6 +45,11 @@ class DBManager(context: Context) :
                     "$COlUMN_ARTEFACT_MODALITIES, $COlUMN_ARTEFACT_STATE TEXT)"
         db.execSQL(CREATE_ARTEFACT_TABLE)
 
+        val TABLE_ROLE_CREATE =
+            "CREATE TABLE $TABLE_ROLE($COlUMN_ROLE_ID INTEGER PRIMARY KEY, " +
+                    "$COlUMN_USER_ID TEXT, $COlUMN_IS_ADMIN TEXT)"
+        db.execSQL(TABLE_ROLE_CREATE)
+
         val CREATE_BOOKMARK_TABLE =
             "CREATE TABLE $TABLE_BOOKMARK($COlUMN_BOOKMARK_ID INTEGER PRIMARY KEY, $COlUMN_ARTEFACT_ID INTEGER, $COlUMN_USER_ID TEXT)"
         db.execSQL(CREATE_BOOKMARK_TABLE)
@@ -55,6 +64,7 @@ class DBManager(context: Context) :
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL("DROP TABLE IF EXISTS $TABLE_ARTEFACT")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_ROLE")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_BOOKMARK")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_MODALITY")
         onCreate(db)
@@ -79,6 +89,67 @@ class DBManager(context: Context) :
         db.close()
         return artefactsList
     }
+
+    fun isAdmin (id: String): Boolean{
+
+        val query = "SELECT * FROM $TABLE_ROLE WHERE $COlUMN_USER_ID = ?"
+        val db = this.writableDatabase
+        var isAmin: Boolean = false
+
+        val cursor = db.rawQuery(query, arrayOf(id), null)
+
+        if (cursor.moveToFirst()) {
+            isAmin = cursor.getString(2).toBoolean()
+        }
+        cursor.close()
+        return isAmin
+    }
+
+    fun registerRole(id: String, role: String){
+
+        val values = ContentValues()
+        values.put(COlUMN_USER_ID, id)
+        values.put(COlUMN_IS_ADMIN, role)
+
+        val db = this.writableDatabase
+        db.insert(TABLE_ROLE, null, values)
+    }
+
+    fun changeRole(id: String, role: String) {
+        val values = ContentValues()
+        values.put(COlUMN_USER_ID, id)
+        values.put(COlUMN_IS_ADMIN, role)
+
+        val db = this.writableDatabase
+
+        db.update(
+            TABLE_ROLE,
+            values,
+            "$COlUMN_USER_ID = ?",
+            arrayOf(id)
+        )
+    }
+
+    fun populateUsersList(): ArrayList<String> {
+
+        val sql = "SELECT * FROM $TABLE_ROLE"
+        val db = this.readableDatabase
+
+        val usersList = arrayListOf<String>()
+
+        val cursor = db.rawQuery(sql, null)
+
+        if (cursor.moveToFirst()) {
+            do {
+                usersList.add(cursor.getString(1))
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return usersList
+
+    }
+
+
 
 
     fun addUserBookmark(userId: String, artefactId: Int?) {
@@ -110,7 +181,6 @@ class DBManager(context: Context) :
             "SELECT * FROM $TABLE_ARTEFACT WHERE $COlUMN_ARTEFACT_STATE != 'ready'"
         }
         val db = this.readableDatabase
-
         val artefactsList = arrayListOf<Artefact>()
 
         val cursor = if (state == "ready") {
