@@ -2,12 +2,14 @@ package com.example.csc_306_cw
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.csc_306_cw.database.DBManager
@@ -21,6 +23,7 @@ import com.google.firebase.ktx.Firebase
 
 class NewArtefactFormActivity: AppCompatActivity(), OnMapReadyCallback {
     private lateinit var paragraphsContainer: LinearLayout
+    private lateinit var modalitiesContainer: LinearLayout
     private lateinit var addParagraphButton: Button
     private lateinit var addModalitiesButton: Button
     private  var image: ByteArray?  = null
@@ -40,6 +43,7 @@ class NewArtefactFormActivity: AppCompatActivity(), OnMapReadyCallback {
 
         paragraphsContainer = findViewById(R.id.paragraphs_container)
         addParagraphButton = findViewById(R.id.add_paragraph_button)
+        modalitiesContainer = findViewById(R.id.modalities_container)
 
         addParagraphButton.setOnClickListener {
             addParagraphView()
@@ -47,7 +51,30 @@ class NewArtefactFormActivity: AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        populateModalities(modalities)
     }
+
+    private fun populateModalities(modalities: ArrayList<Int>) {
+        modalitiesContainer.removeAllViews()
+            for (modalityId in modalities) {
+                val db = DBManager(this)
+                val modality = db.getModality(modalityId)
+
+                val imageBitmap = BitmapFactory.decodeByteArray(modality, 0, modality!!.size)
+                val inflater = LayoutInflater.from(this)
+                val view = inflater.inflate(R.layout.artefact_modality_editable, modalitiesContainer, false)
+                view.findViewById<ImageView>(R.id.modality).setImageBitmap(imageBitmap)
+                val deleteButton = view.findViewById<Button>(R.id.delete_button)
+                modalitiesContainer.addView(view)
+
+                deleteButton.setOnClickListener {
+                    val modalityIndex = modalities.indexOf(modalityId)
+                    modalities.removeAt(modalityIndex)
+                    populateModalities(modalities)
+                }
+            }
+    }
+
 
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -106,6 +133,7 @@ class NewArtefactFormActivity: AppCompatActivity(), OnMapReadyCallback {
         val db = DBManager(this)
         var id = db.addModality(bytes)
         modalities.add(id)
+        populateModalities(modalities)
     }
 
     fun createArtefact (view: View) {

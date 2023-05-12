@@ -25,8 +25,7 @@
             android:id="@+id/search_bar"
             android:layout_width="300dp"
             android:layout_height="56dp"
-            android:elevation="200dp"
-            android:onClick="launch">
+            android:elevation="200dp">
 
         </com.google.android.material.search.SearchBar>
 
