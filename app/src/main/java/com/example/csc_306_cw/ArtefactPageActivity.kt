@@ -4,8 +4,10 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,11 +18,18 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class ArtefactPageActivity : FragmentActivity(), OnMapReadyCallback {
 
     lateinit var map: GoogleMap
     lateinit var atrefact: Artefact
+    lateinit var updateButton: FloatingActionButton
+    private var auth = Firebase.auth
+    private var currentUser = auth.currentUser
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +53,8 @@ class ArtefactPageActivity : FragmentActivity(), OnMapReadyCallback {
 
         // setting the MainImage
         var mainImage = findViewById<View>(R.id.main_image) as ImageView
-        val imageBitmap = BitmapFactory.decodeByteArray(atrefact.getImage(), 0, atrefact.getImage()!!.size)
+        val imageBitmap =
+            BitmapFactory.decodeByteArray(atrefact.getImage(), 0, atrefact.getImage()!!.size)
         mainImage.setImageBitmap(imageBitmap)
 
         //Setting the text recycler View
@@ -64,12 +74,34 @@ class ArtefactPageActivity : FragmentActivity(), OnMapReadyCallback {
             ArtefactModalitiesAdapter(atrefact.getArtefactModalities())
         modalitiesRecyclerView.adapter = modalitiesSectionArtefactModalitiesAdapter
 
+        updateButton = findViewById<FloatingActionButton>(R.id.modification_request_button)
+        if (db.getState(atrefact.getId()!!) != "ready") {
+            updateButton.isVisible = false
+        }
+
     }
 
-    fun update(view: View){
-        val newIntent = Intent(this, UpdateArtefactFormActivity::class.java)
-        newIntent.putExtra("id", atrefact.getId())
-        startActivity(newIntent)
+    fun update(view: View) {
+        if (isUserLoggedIn()) {
+            val newIntent = Intent(this, UpdateArtefactFormActivity::class.java)
+            newIntent.putExtra("id", atrefact.getId())
+            startActivity(newIntent)
+        } else {
+
+            displayMassage(updateButton, getString(R.string.login_first))
+        }
+    }
+
+    private fun displayMassage(view: View, mess: String) {
+        val sb = Snackbar.make(view, mess, Snackbar.LENGTH_SHORT)
+        sb.show()
+    }
+
+    private fun isUserLoggedIn(): Boolean {
+        currentUser = auth.currentUser
+        val currentUserEmail = currentUser?.email
+
+        return currentUserEmail != null
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
