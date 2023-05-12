@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.example.csc_306_cw.Artefact
+import com.google.android.gms.maps.model.LatLng
 
 const val DATABASE_VERSION = 5
 private const val DATABASE_NAME = "artefactapp"
@@ -19,6 +20,7 @@ private const val COlUMN_ARTEFACT_META_DATA = "artefactMetaData"
 private const val COlUMN_ARTEFACT_PARAGRAPHS = "artefactParagraphs"
 private const val COlUMN_ARTEFACT_MODALITIES = "artefactModalities"
 private const val COlUMN_ARTEFACT_STATE = "artefactState"
+private const val COlUMN_ARTEFACT_LOCATION = "artefactLocation"
 
 private const val TABLE_ROLE = "roles"
 private const val COlUMN_ROLE_ID = "roleId"
@@ -43,7 +45,7 @@ class DBManager(context: Context) :
                     "$COlUMN_ARTEFACT_NAME TEXT, $COlUMN_ARTEFACT_MAIN_IMAGE BLOB," +
                     "$COlUMN_ARTEFACT_META_DATA TEXT, $COlUMN_ARTEFACT_PARAGRAPHS TEXT, " +
                     "$COlUMN_ARTEFACT_MODALITIES, $COlUMN_ARTEFACT_STATE TEXT, " +
-                    "$COlUMN_USER_ID TEXT)"
+                    "$COlUMN_USER_ID TEXT, $COlUMN_ARTEFACT_LOCATION TEXT)"
         db.execSQL(CREATE_ARTEFACT_TABLE)
 
         val TABLE_ROLE_CREATE =
@@ -240,13 +242,10 @@ class DBManager(context: Context) :
     }
 
     fun addArtefact(
-        name: String,
-        mainImage: ByteArray?,
-        metadata: String,
-        paragraphs: String,
-        modalities: String,
-        state: String,
-        id: String
+        name: String, mainImage: ByteArray?,
+        metadata: String, paragraphs: String,
+        modalities: String, state: String,
+        id: String, location: String
     ) {
 
         Log.d("testing","add artefact" )
@@ -258,6 +257,7 @@ class DBManager(context: Context) :
         values.put(COlUMN_ARTEFACT_MODALITIES, modalities)
         values.put(COlUMN_ARTEFACT_STATE, state)
         values.put(COlUMN_USER_ID, id)
+        values.put(COlUMN_ARTEFACT_LOCATION, location)
 
         val db = this.writableDatabase
         var id = db.insert(TABLE_ARTEFACT, null, values)
@@ -287,8 +287,11 @@ class DBManager(context: Context) :
             artefact.modalitiesToJson(artefact.getArtefactModalities())
         )
         values.put(
-            COlUMN_ARTEFACT_STATE,
-            state
+            COlUMN_ARTEFACT_STATE, state
+        )
+        values.put(
+            COlUMN_ARTEFACT_LOCATION,
+            artefact.latLngToJson(artefact.getLocation()!!)
         )
 
         val db = this.writableDatabase
@@ -349,6 +352,7 @@ class DBManager(context: Context) :
         val artefactMetaData = cursor.getString(3)
         val artefactParagraph = cursor.getString(4)
         val artefactModalities = cursor.getString(5)
+        val artefactLocation = cursor.getString(8)
 
         artefact = Artefact()
         artefact.setId(id)
@@ -357,6 +361,7 @@ class DBManager(context: Context) :
         artefact.setMeta(artefactMetaData)
         artefact.setArtefactParagraphs(artefact.jsonToParagraphs(artefactParagraph))
         artefact.setArtefactModalities(artefact.jsonToModalities(artefactModalities))
+        artefact.setLocation(artefact.jsonToLatLng(artefactLocation)!!)
 
         return artefact
     }

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
@@ -107,8 +106,8 @@ class ArtefactPageActivity : FragmentActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
 
         map = googleMap
-        var campus: LatLng = LatLng(51.619296, -3.878914)
-        map.addMarker(MarkerOptions().position(campus).title("Computational Foundry"))
-        map.moveCamera(CameraUpdateFactory.newLatLng(campus))
+        var location: LatLng = atrefact.getLocation()!!
+        map.addMarker(MarkerOptions().position(location).title("artefact location"))
+        map.moveCamera(CameraUpdateFactory.newLatLng(location))
     }
 }

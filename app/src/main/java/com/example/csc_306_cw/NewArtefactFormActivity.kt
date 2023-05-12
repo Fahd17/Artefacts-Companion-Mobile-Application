@@ -11,10 +11,15 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.csc_306_cw.database.DBManager
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-class NewArtefactFormActivity: AppCompatActivity() {
+class NewArtefactFormActivity: AppCompatActivity(), OnMapReadyCallback {
     private lateinit var paragraphsContainer: LinearLayout
     private lateinit var addParagraphButton: Button
     private lateinit var addModalitiesButton: Button
@@ -22,6 +27,11 @@ class NewArtefactFormActivity: AppCompatActivity() {
     private val PICK_IMAGE_REQUEST = 1
     var mainImageCheck: Boolean = false
     var modalities : ArrayList<Int> = ArrayList<Int>()
+    private lateinit var map: GoogleMap
+
+    //setting the default location to CoFo
+    private var artefactLocation: LatLng = LatLng(51.619296, -3.878914)
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,10 +44,23 @@ class NewArtefactFormActivity: AppCompatActivity() {
         addParagraphButton.setOnClickListener {
             addParagraphView()
         }
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
 
     }
 
 
+    override fun onMapReady(googleMap: GoogleMap) {
+        map = googleMap
+        map.setOnMapClickListener { point ->
+            map.clear()
+            val marker = MarkerOptions()
+                .position(point)
+                .title("artefact location")
+            map.addMarker(marker)
+            artefactLocation = point
+        }
+    }
 
     fun mainImagePicker(view: View) {
         mainImageCheck = true
@@ -100,7 +123,8 @@ class NewArtefactFormActivity: AppCompatActivity() {
         var auth =  Firebase.auth
         var currentUser = auth.currentUser
         db.addArtefact(name, image, "Author: ".plus(author).plus(", Produced: ".plus(year)),
-            artefact.paragraphsToJson(populateParagraphs()), artefact.modalitiesToJson(modalities), "new", currentUser!!.uid)
+            artefact.paragraphsToJson(populateParagraphs()), artefact.modalitiesToJson(modalities),
+            "new", currentUser!!.uid, artefact.latLngToJson(artefactLocation))
 
 
         startActivity(Intent(this, MainActivity::class.java))
@@ -118,6 +142,7 @@ class NewArtefactFormActivity: AppCompatActivity() {
         }
         return paragraphs
     }
+
 
 
 }

@@ -11,10 +11,15 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.csc_306_cw.database.DBManager
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-class UpdateArtefactFormActivity: AppCompatActivity() {
+class UpdateArtefactFormActivity: AppCompatActivity(), OnMapReadyCallback {
     private lateinit var nameText: EditText
     private lateinit var authorText: EditText
     private lateinit var yearText: EditText
@@ -26,6 +31,10 @@ class UpdateArtefactFormActivity: AppCompatActivity() {
     private val PICK_IMAGE_REQUEST = 1
     var mainImageCheck: Boolean = false
     lateinit var targetArtefact: Artefact
+    private lateinit var map: GoogleMap
+
+    //setting the default location to CoFo
+    private var artefactLocation: LatLng = LatLng(51.619296, -3.878914)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +53,26 @@ class UpdateArtefactFormActivity: AppCompatActivity() {
         val extras = intent.extras
         targetArtefact = extras?.let { db.findArtefact(it.getInt("id")) }!!
 
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
         fillArtefactData()
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        map = googleMap
+       addMarkerToMap(targetArtefact.getLocation()!!)
+        map.setOnMapClickListener { point ->
+            map.clear()
+            addMarkerToMap(point)
+            artefactLocation = point
+        }
+    }
+
+    private fun addMarkerToMap (point: LatLng){
+        val marker = MarkerOptions()
+            .position(point)
+            .title("artefact location")
+        map.addMarker(marker)
     }
 
     private fun fillArtefactData(){
@@ -56,6 +84,7 @@ class UpdateArtefactFormActivity: AppCompatActivity() {
         val paragraphs = targetArtefact.getArtefactParagraphs()
         addParagraphView(paragraphs)
 
+        artefactLocation = targetArtefact.getLocation()!!
     }
 
     fun mainImagePicker(view: View) {
@@ -127,8 +156,7 @@ class UpdateArtefactFormActivity: AppCompatActivity() {
         var currentUser = auth.currentUser
         db.addArtefact(name, image, targetArtefact.getMeta(),
             artefact.paragraphsToJson(populateParagraphs()), artefact.modalitiesToJson(modalities),
-            targetArtefact.getId().toString(), currentUser!!.uid
-        )
+            targetArtefact.getId().toString(), currentUser!!.uid, artefact.latLngToJson(artefactLocation))
 
 
         startActivity(Intent(this, MainActivity::class.java))
