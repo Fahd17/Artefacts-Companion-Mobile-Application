@@ -57,15 +57,33 @@
                     android:layout_height="wrap_content"
                     android:text="TextView" />
 
-                <Button
-                    android:id="@+id/approve_button"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                <LinearLayout
+                    android:layout_width="103dp"
+                    android:layout_height="match_parent"
                     android:layout_gravity="right"
-                    android:layout_margin="4dp"
-                    app:icon="@drawable/baseline_done_24"
-                    app:iconGravity="top"
-                    app:iconSize="25dp" />
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/approve_button"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="right"
+                        android:layout_margin="4dp"
+                        app:icon="@drawable/baseline_done_24"
+                        app:iconGravity="top"
+                        app:iconSize="25dp" />
+
+                    <Button
+                        android:id="@+id/cancel_button"
+                        android:layout_width="45dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="right"
+                        android:layout_margin="4dp"
+                        android:gravity="right"
+                        app:icon="@drawable/baseline_cancel_24"
+                        app:iconGravity="top"
+                        app:iconSize="25dp" />
+                </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>

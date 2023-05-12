@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.csc_306_cw.database.DBManager
 import com.google.firebase.auth.ktx.auth
@@ -50,9 +51,11 @@ class RequestRowAdapter(private val artefacts: ArrayList<Artefact>): RecyclerVie
             context.startActivity(newIntent)
         })
 
+        val db = DBManager(context)
+
         var approveButton = holder.itemView.findViewById<Button>(R.id.approve_button) as Button
         approveButton.setOnClickListener(View.OnClickListener {
-            val db = DBManager(context)
+
             var state = db.getState(info.getId()!!)
 
             if (state.equals("new")){
@@ -67,6 +70,18 @@ class RequestRowAdapter(private val artefacts: ArrayList<Artefact>): RecyclerVie
                 artefacts.removeAt(position)
                 notifyItemRemoved(position)
             }
+
+        })
+
+        if (!db.isAdmin(currentUser!!.uid)) {
+            approveButton.isVisible = false
+        }
+
+        var cancelButton = holder.itemView.findViewById<Button>(R.id.cancel_button) as Button
+        cancelButton.setOnClickListener(View.OnClickListener {
+            db.deleteArtefact(info.getId()!!)
+            artefacts.removeAt(position)
+            notifyItemRemoved(position)
 
         })
     }

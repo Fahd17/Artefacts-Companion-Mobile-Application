@@ -3,4 +3,5 @@
     <string name="register_title">Register</string>
     <string name="register_while_logged_in">You are already logged in!</string>
     <string name="password_not_matching">The passwords are not matching!</string>
+    <string name="login_first">You have to login first!</string>
 </resources>

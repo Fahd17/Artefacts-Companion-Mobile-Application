@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.csc_306_cw.database.DBManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -25,12 +26,11 @@ class BookmarkActivity : AppCompatActivity() {
         val currentUserId = currentUser?.uid
 
         if (currentUserId != null) {
-            Log.d("testing", currentUserId)
-        }
-
-        if (currentUserId != null) {
             val db = DBManager(this)
             atrefacts = db.getUserBookmark(currentUserId)
+        } else {
+            val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation_bar)
+            displayMassage(bottomNavigationView, getString(R.string.login_first))
         }
 
         val textRecyclerView = findViewById<View>(R.id.artefacts_secondly_menu) as RecyclerView
@@ -43,6 +43,12 @@ class BookmarkActivity : AppCompatActivity() {
         bottomNavigationView.selectedItemId = R.id.bookmark
         navigationItemSelectedListener()
 
+    }
+
+    private fun displayMassage(view: View, mess: String) {
+        val sb = Snackbar.make(view, mess, Snackbar.LENGTH_SHORT)
+        sb.anchorView = view
+        sb.show()
     }
 
     private fun navigationItemSelectedListener() {

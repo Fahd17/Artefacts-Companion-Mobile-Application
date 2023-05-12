@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:elevation="200dp"
+    android:elevation="0dp"
     android:orientation="vertical">
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -49,8 +49,8 @@
         android:id="@+id/artefacts_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorSecondaryVariant"
-        android:layout_weight="10">
+        android:layout_weight="10"
+        android:background="?attr/colorSecondaryVariant">
 
     </androidx.recyclerview.widget.RecyclerView>
 

@@ -42,7 +42,8 @@ class DBManager(context: Context) :
             "CREATE TABLE $TABLE_ARTEFACT($COlUMN_ARTEFACT_ID INTEGER PRIMARY KEY, " +
                     "$COlUMN_ARTEFACT_NAME TEXT, $COlUMN_ARTEFACT_MAIN_IMAGE BLOB," +
                     "$COlUMN_ARTEFACT_META_DATA TEXT, $COlUMN_ARTEFACT_PARAGRAPHS TEXT, " +
-                    "$COlUMN_ARTEFACT_MODALITIES, $COlUMN_ARTEFACT_STATE TEXT)"
+                    "$COlUMN_ARTEFACT_MODALITIES, $COlUMN_ARTEFACT_STATE TEXT, " +
+                    "$COlUMN_USER_ID TEXT)"
         db.execSQL(CREATE_ARTEFACT_TABLE)
 
         val TABLE_ROLE_CREATE =
@@ -149,9 +150,6 @@ class DBManager(context: Context) :
 
     }
 
-
-
-
     fun addUserBookmark(userId: String, artefactId: Int?) {
         val db = this.writableDatabase
 
@@ -174,6 +172,23 @@ class DBManager(context: Context) :
         db.close()
     }
 
+    fun populateUserArtefactsList(userId: String): ArrayList<Artefact> {
+        val sql = "SELECT * FROM $TABLE_ARTEFACT WHERE $COlUMN_ARTEFACT_STATE != ? AND $COlUMN_USER_ID = ?"
+
+        val db = this.readableDatabase
+        val artefactsList = arrayListOf<Artefact>()
+
+        val cursor = db.rawQuery(sql, arrayOf("ready", userId), null)
+
+        if (cursor.moveToFirst()) {
+            do {
+                artefactsList.add(constructArtefact(cursor))
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return artefactsList
+    }
+
     fun populateArtefactsList(state: String): ArrayList<Artefact> {
         val sql = if (state == "ready") {
             "SELECT * FROM $TABLE_ARTEFACT WHERE $COlUMN_ARTEFACT_STATE = ?"
@@ -181,6 +196,7 @@ class DBManager(context: Context) :
             "SELECT * FROM $TABLE_ARTEFACT WHERE $COlUMN_ARTEFACT_STATE != 'ready'"
         }
         val db = this.readableDatabase
+
         val artefactsList = arrayListOf<Artefact>()
 
         val cursor = if (state == "ready") {
@@ -229,7 +245,8 @@ class DBManager(context: Context) :
         metadata: String,
         paragraphs: String,
         modalities: String,
-        state: String
+        state: String,
+        id: String
     ) {
 
         Log.d("testing","add artefact" )
@@ -240,6 +257,7 @@ class DBManager(context: Context) :
         values.put(COlUMN_ARTEFACT_PARAGRAPHS, paragraphs)
         values.put(COlUMN_ARTEFACT_MODALITIES, modalities)
         values.put(COlUMN_ARTEFACT_STATE, state)
+        values.put(COlUMN_USER_ID, id)
 
         val db = this.writableDatabase
         db.insert(TABLE_ARTEFACT, null, values)

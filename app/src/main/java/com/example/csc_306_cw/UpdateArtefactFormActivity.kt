@@ -11,6 +11,8 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.csc_306_cw.database.DBManager
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class UpdateArtefactFormActivity: AppCompatActivity() {
     private lateinit var nameText: EditText
@@ -121,9 +123,11 @@ class UpdateArtefactFormActivity: AppCompatActivity() {
 
         val db = DBManager(this)
         val artefact = Artefact()
+        var auth =  Firebase.auth
+        var currentUser = auth.currentUser
         db.addArtefact(name, image, targetArtefact.getMeta(),
             artefact.paragraphsToJson(populateParagraphs()), artefact.modalitiesToJson(modalities),
-            targetArtefact.getId().toString()
+            targetArtefact.getId().toString(), currentUser!!.uid
         )
 
 
