@@ -260,7 +260,8 @@ class DBManager(context: Context) :
         values.put(COlUMN_USER_ID, id)
 
         val db = this.writableDatabase
-        db.insert(TABLE_ARTEFACT, null, values)
+        var id = db.insert(TABLE_ARTEFACT, null, values)
+        Log.d("test", id.toString())
 
     }
 
@@ -311,6 +312,17 @@ class DBManager(context: Context) :
         }
         cursor.close()
         return foundState
+    }
+
+    fun isArtefactPresent(id: String): Boolean {
+
+        val query = "SELECT COUNT(*) FROM $TABLE_ARTEFACT WHERE $COlUMN_ARTEFACT_ID = ?"
+        val db = this.readableDatabase
+        val cursor = db.rawQuery(query, arrayOf(id.toString()), null)
+        cursor.moveToFirst()
+        val count = cursor.getInt(0)
+        cursor.close()
+        return count > 0
     }
 
     fun findArtefact(id: Int): Artefact? {

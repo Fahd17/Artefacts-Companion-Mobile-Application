@@ -6,10 +6,8 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.csc_306_cw.database.DBManager
@@ -17,6 +15,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 
 class MainActivity : AppCompatActivity() {
 
@@ -94,7 +94,29 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    fun readQRCode(view: View) {
+
+        var options = ScanOptions()
+        options.setCaptureActivity(ScanActivity::class.java)
+        barLauncher.launch(options)
+    }
+
+        val barLauncher = registerForActivityResult(ScanContract()) { result ->
+            if (result.contents != null) {
+                var id = result.contents
+                Log.d("testing", id)
+                val db = DBManager(this)
+                if(db.isArtefactPresent(id)) {
+                    val artefactPage = Intent(this, ArtefactPageActivity::class.java)
+                    artefactPage.putExtra("id", id.toInt())
+                    startActivity(artefactPage)
+                } else {
+                    val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation_bar)
+                    displayMassage(bottomNavigationView, getString(R.string.invalid_QR))
+                }
+            }
+        }
+        override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var toolbar = findViewById<Toolbar>(R.id.artefact_menu_toolbar)
         when (item.itemId) {
             R.id.create_artefact -> {

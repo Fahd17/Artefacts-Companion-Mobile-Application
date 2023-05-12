@@ -37,7 +37,7 @@
             android:layout_gravity="center"
             android:layout_marginRight="8dp"
             android:layout_weight="1"
-            android:onClick="launch2"
+            android:onClick="readQRCode"
             app:icon="@android:drawable/ic_menu_camera"
             app:iconGravity="top"
             app:iconSize="25dp"

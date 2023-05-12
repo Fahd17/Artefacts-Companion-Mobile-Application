@@ -5,4 +5,6 @@
     <string name="password_not_matching">The passwords are not matching!</string>
     <string name="login_first">You have to login first!</string>
     <string name="admin_role_required">Admin role required for this action!</string>
+    <string name="invalid_QR">Invalid QR code</string>
+
 </resources>
