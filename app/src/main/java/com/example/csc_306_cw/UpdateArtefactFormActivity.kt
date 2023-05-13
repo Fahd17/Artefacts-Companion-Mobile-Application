@@ -150,7 +150,8 @@ class UpdateArtefactFormActivity: AppCompatActivity(), OnMapReadyCallback {
 
             val imageBitmap = BitmapFactory.decodeByteArray(modality, 0, modality!!.size)
             val inflater = LayoutInflater.from(this)
-            val view = inflater.inflate(R.layout.artefact_modality_editable, modalitiesContainer, false)
+            val view = inflater.inflate(R.layout.artefact_modality_editable,
+                modalitiesContainer, false)
             view.findViewById<ImageView>(R.id.modality).setImageBitmap(imageBitmap)
             val deleteButton = view.findViewById<Button>(R.id.delete_button)
             modalitiesContainer.addView(view)
