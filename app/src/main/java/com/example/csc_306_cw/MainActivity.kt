@@ -2,7 +2,6 @@ package com.example.csc_306_cw
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -48,13 +47,13 @@ class MainActivity : AppCompatActivity() {
         toolbarOptions()
     }
 
-     private fun displayMassage(view: View, mess: String) {
+    private fun displayMassage(view: View, mess: String) {
         val sb = Snackbar.make(view, mess, Snackbar.LENGTH_SHORT)
-         sb.anchorView = view
-         sb.show()
+        sb.anchorView = view
+        sb.show()
     }
 
-    private fun isUserLoggedIn():Boolean {
+    private fun isUserLoggedIn(): Boolean {
         currentUser = auth.currentUser
         val currentUserEmail = currentUser?.email
 
@@ -98,25 +97,25 @@ class MainActivity : AppCompatActivity() {
 
         var options = ScanOptions()
         options.setCaptureActivity(ScanActivity::class.java)
-        barLauncher.launch(options)
+        launcher.launch(options)
     }
 
-        val barLauncher = registerForActivityResult(ScanContract()) { result ->
-            if (result.contents != null) {
-                var id = result.contents
-                Log.d("testing", id)
-                val db = DBManager(this)
-                if(db.isArtefactPresent(id)) {
-                    val artefactPage = Intent(this, ArtefactPageActivity::class.java)
-                    artefactPage.putExtra("id", id.toInt())
-                    startActivity(artefactPage)
-                } else {
-                    val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation_bar)
-                    displayMassage(bottomNavigationView, getString(R.string.invalid_QR))
-                }
+    val launcher = registerForActivityResult(ScanContract()) { result ->
+        if (result.contents != null) {
+            var id = result.contents
+            val db = DBManager(this)
+            if (db.isArtefactPresent(id)) {
+                val artefactPage = Intent(this, ArtefactPageActivity::class.java)
+                artefactPage.putExtra("id", id.toInt())
+                startActivity(artefactPage)
+            } else {
+                val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation_bar)
+                displayMassage(bottomNavigationView, getString(R.string.invalid_QR))
             }
         }
-        override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var toolbar = findViewById<Toolbar>(R.id.artefact_menu_toolbar)
         when (item.itemId) {
             R.id.create_artefact -> {
@@ -125,7 +124,8 @@ class MainActivity : AppCompatActivity() {
                     startActivity(newArtefact)
                 } else {
 
-                    val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation_bar)
+                    val bottomNavigationView =
+                        findViewById<BottomNavigationView>(R.id.navigation_bar)
                     displayMassage(bottomNavigationView, getString(R.string.login_first))
                 }
                 true

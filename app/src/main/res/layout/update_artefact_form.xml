@@ -113,7 +113,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="createArtefact"
-                android:text="Update artefact" />
+                android:text="@string/update_artefact" />
+
+            <Button
+                android:id="@+id/delete_artefact_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/red"
+                android:onClick="deleteArtefact"
+                android:text="@string/delete_artefact" />
 
         </LinearLayout>
 

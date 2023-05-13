@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.example.csc_306_cw.database.DBManager
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -29,12 +30,15 @@ class UpdateArtefactFormActivity: AppCompatActivity(), OnMapReadyCallback {
     private lateinit var modalitiesContainer: LinearLayout
     private lateinit var addParagraphButton: Button
     private lateinit var addModalitiesButton: Button
+    private lateinit var deleteButton: Button
     private  var image: ByteArray?  = null
     var modalities : ArrayList<Int> = ArrayList<Int>()
     private val PICK_IMAGE_REQUEST = 1
     var mainImageCheck: Boolean = false
     lateinit var targetArtefact: Artefact
     private lateinit var map: GoogleMap
+    private var auth =  Firebase.auth
+    private var currentUser = auth.currentUser
 
     //setting the default location to CoFo
     private var artefactLocation: LatLng = LatLng(51.619296, -3.878914)
@@ -61,6 +65,14 @@ class UpdateArtefactFormActivity: AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
         fillArtefactData()
         populateModalities(modalities)
+
+
+        deleteButton = findViewById<Button>(R.id.delete_artefact_button)
+        if (!db.isAdmin(currentUser!!.uid)) {
+            deleteButton.isVisible = false
+
+        }
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -185,6 +197,17 @@ class UpdateArtefactFormActivity: AppCompatActivity(), OnMapReadyCallback {
             artefact.paragraphsToJson(populateParagraphs()), artefact.modalitiesToJson(modalities),
             targetArtefact.getId().toString(), currentUser!!.uid, artefact.latLngToJson(artefactLocation))
 
+
+        startActivity(Intent(this, MainActivity::class.java))
+    }
+
+    fun deleteArtefact (view: View) {
+
+        val name = nameText.text.toString()
+
+
+        val db = DBManager(this)
+        db.deleteArtefact(targetArtefact.getId()!!)
 
         startActivity(Intent(this, MainActivity::class.java))
     }
