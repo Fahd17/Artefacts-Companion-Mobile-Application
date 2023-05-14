@@ -48,7 +48,11 @@ class RegisterActivity: AppCompatActivity()  {
             // in case they not logged in
         } else {
             val db = DBManager(this)
-            db.registerRole(currentUserId!!, "false")
+            if (db.populateUsersList().size == 0) {
+                db.registerRole(currentUserId!!, "true")
+            } else {
+                db.registerRole(currentUserId!!, "false")
+            }
             val newIntent = Intent(this, MainActivity::class.java)
             startActivity(newIntent)
         }
