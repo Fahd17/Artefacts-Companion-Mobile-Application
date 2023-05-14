@@ -29,7 +29,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Update Artefact"
+                android:text="@string/update_artefact"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -42,7 +42,7 @@
                     android:id="@+id/name_text_field"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:hint="Name"
+                    android:hint="@string/Name"
                     android:inputType="textCapWords"
                     android:maxLines="1" />
 
@@ -52,14 +52,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:onClick="mainImagePicker"
-                    android:text="Main image" />
+                    android:text="@string/Main_image" />
             </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="16dp"
-                android:text="Paragraphs"
+                android:text="@string/Paragraphs"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <LinearLayout
@@ -74,13 +74,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Add Paragraph" />
+                android:text="@string/add_paragraphs" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="16dp"
-                android:text="Modalities"
+                android:text="@string/Modalities"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <LinearLayout
@@ -98,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:onClick="modalityImagePicker"
-                android:text="Add Modality" />
+                android:text="@string/add_Modality" />
 
             <fragment
                 android:layout_width="match_parent"

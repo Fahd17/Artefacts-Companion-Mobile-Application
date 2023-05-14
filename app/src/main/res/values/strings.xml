@@ -13,9 +13,23 @@
     <string name="Guest_title">Guest</string>
     <string name="email_hint">Please enter email</string>
     <string name="password_hint">please enter password</string>
+    <string name="password_re_enter">Re-enter password</string>
     <string name="forgot_password">forgot password?</string>
     <string name="delete_artefact">Delete artefact</string>
     <string name="update_artefact">Update artefact</string>
+    <string name="new_artefact">New artefact</string>
+    <string name="create_account">Create account</string>
+    <string name="Admin">Admin</string>
+    <string name="Name">Name</string>
+    <string name="Main_image">Main image</string>
+    <string name="add_paragraphs">Add paragraph</string>
+    <string name="Paragraphs">Paragraphs</string>
+    <string name="add_Modality">Add modality</string>
+    <string name="Modalities">Modalities</string>
+    <string name="Author_name"> Author name</string>
+    <string name="Author_name_hint"> Enter author name</string>
+    <string name="Production_year"> Production year</string>
+
 
 
 
